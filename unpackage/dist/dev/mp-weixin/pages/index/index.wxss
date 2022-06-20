@@ -1,0 +1,23 @@
+
+.container {
+		padding: 20px;
+		font-size: 14px;
+		line-height: 24px;
+}
+.swiper {
+		height: 300rpx;
+		width: 100%;
+}
+ .uni-swiper-dots {
+		bottom: 1rpx;
+}
+ .uni-swiper-dot {
+		color: red;
+		height: 12rpx !important;
+		width: 12rpx !important;
+		border: 1rpx solid red;
+		bottom: 200rpx;
+}
+.item {
+		color: red;
+}
