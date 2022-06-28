@@ -1,22 +1,29 @@
 <template>
   <view class="container">
-    <swiper
-      v-if="configure.showSwipper"
-      class="swiper"
-      :indicator-dots="true"
-      circular
-      :autoplay="true"
-      :interval="3000"
-      :duration="1000"
-      indicator-color="transparent"
-      indicator-active-color="white"
-    >
-      <swiper-item v-for="(item, index) in sliders" :key="index">
-        <image :src="item.pictureUrl" mode="as"></image>
-      </swiper-item>
-    </swiper>
-    <view v-if="configure.showSearchBar">
-      <uni-search-bar v-model="searchValue" />
+    <view class="header">
+      <swiper
+        v-if="configure.showSwipper"
+        class="swiper"
+        :indicator-dots="true"
+        circular
+        :autoplay="true"
+        :interval="3000"
+        :duration="1000"
+        indicator-color="transparent"
+        indicator-active-color="white"
+      >
+        <swiper-item v-for="(item, index) in sliders" :key="index">
+          <image :src="item.pictureUrl" mode="as"></image>
+        </swiper-item>
+      </swiper>
+    </view>
+    <view class="content">
+      <view class="category"></view>
+      <view class="list"></view>
+    </view>
+    <view class="footer">
+      <custom-tab-bar direction="horizontal" :show-icon="true" :selected="0">
+      </custom-tab-bar>
     </view>
   </view>
 </template>
@@ -1330,5 +1337,8 @@ export default {
 }
 .item {
   color: red;
+}
+.footer {
+  height: 40rpx;
 }
 </style>
