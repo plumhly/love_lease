@@ -10,5 +10,26 @@
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },
+  "tabBar": {
+    "color": "#bfbfbf",
+    "spacing": "0px",
+    "iconWidth": "20px",
+    "selectedColor": "#000",
+    "backgroundColor": "#fff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/shouye.png",
+        "selectedIconPath": "static/shouye_selected.png"
+      },
+      {
+        "pagePath": "pages/user/index",
+        "text": "联系客服",
+        "iconPath": "static/kefu.png",
+        "selectedIconPath": "static/kefu_selected.png"
+      }
+    ]
+  },
   "usingComponents": {}
 }

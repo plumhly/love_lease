@@ -105,11 +105,11 @@
 /******/
 /******/
 /******/ 		// mini-css-extract-plugin CSS loading
-/******/ 		var cssChunks = {"node-modules/@dcloudio/uni-ui/lib/uni-list-item/uni-list-item":1,"node-modules/@dcloudio/uni-ui/lib/uni-list/uni-list":1,"node-modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons":1,"node-modules/@dcloudio/uni-ui/lib/uni-badge/uni-badge":1};
+/******/ 		var cssChunks = {"components/custom-tab-pane/custom-tab-pane":1,"components/custom-tabs/custom-tabs":1,"node-modules/@dcloudio/uni-ui/lib/uni-list-item/uni-list-item":1,"node-modules/@dcloudio/uni-ui/lib/uni-list/uni-list":1,"node-modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons":1,"node-modules/@dcloudio/uni-ui/lib/uni-badge/uni-badge":1};
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "" + ({"node-modules/@dcloudio/uni-ui/lib/uni-list-item/uni-list-item":"node-modules/@dcloudio/uni-ui/lib/uni-list-item/uni-list-item","node-modules/@dcloudio/uni-ui/lib/uni-list/uni-list":"node-modules/@dcloudio/uni-ui/lib/uni-list/uni-list","node-modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons":"node-modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons","node-modules/@dcloudio/uni-ui/lib/uni-badge/uni-badge":"node-modules/@dcloudio/uni-ui/lib/uni-badge/uni-badge"}[chunkId]||chunkId) + ".wxss";
+/******/ 				var href = "" + ({"components/custom-tab-pane/custom-tab-pane":"components/custom-tab-pane/custom-tab-pane","components/custom-tabs/custom-tabs":"components/custom-tabs/custom-tabs","node-modules/@dcloudio/uni-ui/lib/uni-list-item/uni-list-item":"node-modules/@dcloudio/uni-ui/lib/uni-list-item/uni-list-item","node-modules/@dcloudio/uni-ui/lib/uni-list/uni-list":"node-modules/@dcloudio/uni-ui/lib/uni-list/uni-list","node-modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons":"node-modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons","node-modules/@dcloudio/uni-ui/lib/uni-badge/uni-badge":"node-modules/@dcloudio/uni-ui/lib/uni-badge/uni-badge"}[chunkId]||chunkId) + ".wxss";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {
