@@ -13,15 +13,33 @@
         indicator-active-color="white"
       >
         <swiper-item v-for="(item, index) in sliders" :key="index">
-          <image :src="item.pictureUrl" mode="as"></image>
+          <image :src="item.picture"></image>
         </swiper-item>
       </swiper>
     </view>
     <view class="content">
       <view class="category">
-        <custom-tabs :type="c1" :value="categoryIndex" @change="changeCategory">
-          <custom-tab-pane v-for="(category, index) in categorys" :key="index">
+        <custom-tabs
+          class="tabs"
+          type="c1"
+          :value="categoryIndex"
+          @change="changeCategory"
+        >
+          <custom-tab-pane
+            class="tab-pane"
+            v-for="(category, index) in categories"
+            :key="index"
+            :name="'c1_' + index"
+            :label="category.name"
+          >
             <view v-if="isEmpty"></view>
+            <view v-else>
+              <uni-grid :column="2">
+                <uni-grid-item>1</uni-grid-item>
+              </uni-grid>
+              <uni-load-more :status="loadMoreStatus" />
+            </view>
+            <view>1</view>
           </custom-tab-pane>
         </custom-tabs>
       </view>
@@ -30,30 +48,14 @@
   </view>
 </template>
 
+
 <script>
-import { datalist } from "@dcloudio/vue-cli-plugin-uni/packages/postcss/tags";
-import customTabPane from "../../components/custom-tab-pane/custom-tab-pane.vue";
-import CustomTabs from "../../components/custom-tabs/custom-tabs.vue";
 export default {
-  components: { customTabPane, CustomTabs },
-  onLoad(options) {
-    let serachData = this.data.data.filter(
-      (item) => item.type === "searchBar"
-    )[0];
-    console.log(serachData);
-    if (serachData) {
-      this.configure.showSearchBar = true;
-      this.searchValue = serachData.searchBar.title;
-    }
-  },
+  onLoad(options) {},
 
   computed: {
-    sliders() {
-      return this.data.data.filter((item) => item.type === "sowing")[0].sowing;
-    },
-
     isEmpty() {
-      return datalist == null || datalist.length == 0;
+      return this.listData == null || this.listData.length == 0;
     },
   },
 
@@ -66,8 +68,39 @@ export default {
       },
       searchValue: "",
       categoryIndex: 0,
-      categories: [],
+      loadMoreStatus: "more",
+      categories: [
+        {
+          name: "0",
+          value: 0,
+        },
+        {
+          name: "1",
+          value: 1,
+        },
+        {
+          name: "2",
+          value: 2,
+        },
+      ],
       listData: [],
+      sliders: [
+        {
+          url: "",
+          picture:
+            "https://img2.baidu.com/it/u=1336396995,334185844&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=344",
+        },
+        {
+          url: "",
+          picture:
+            "https://img2.baidu.com/it/u=1336396995,334185844&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=344",
+        },
+        {
+          url: "",
+          picture:
+            "https://img2.baidu.com/it/u=1336396995,334185844&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=344",
+        },
+      ],
     };
   },
   methods: {
@@ -75,6 +108,7 @@ export default {
       // 获取分类数据
     },
   },
+  // components: { CustomTabs, CustomTabPane },
 };
 </script>
 
@@ -111,6 +145,12 @@ export default {
   padding: 0, 12rpx;
   .category {
     padding: 16rpx 0;
+    .tabs {
+      height: 30rpx;
+      .tab-pane {
+        height: 30rpx;
+      }
+    }
   }
 }
 </style>

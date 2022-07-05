@@ -21,7 +21,6 @@
 	},
 	"tabBar": {
 		"color": "#bfbfbf",
-		"spacing": "0px",
 		"iconWidth": "20px",
 		"selectedColor": "#000",
 		"backgroundColor": "#fff",
