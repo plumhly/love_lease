@@ -24,6 +24,9 @@
           type="c1"
           :value="categoryIndex"
           @change="changeCategory"
+          :defaultTextStyle="defaultTextStyle"
+          :activeTextStyle="activeTextStyle"
+          :activeLineStyle="activeLineStyle"
         >
           <custom-tab-pane
             class="tab-pane"
@@ -51,7 +54,15 @@
 
 <script>
 export default {
-  onLoad(options) {},
+  onLoad(options) {
+    for (let index = 0; index < 10; index++) {
+      this.goods.push({
+        name: "汉服1",
+        price: 30,
+        url: "http://news.yxrb.net/uploadfile/2020/0720/20200720035548972.jpg",
+      });
+    }
+  },
 
   computed: {
     isEmpty() {
@@ -71,15 +82,15 @@ export default {
       loadMoreStatus: "more",
       categories: [
         {
-          name: "0",
+          name: "汉服",
           value: 0,
         },
         {
-          name: "1",
+          name: "中山装",
           value: 1,
         },
         {
-          name: "2",
+          name: "现代装",
           value: 2,
         },
       ],
@@ -101,6 +112,20 @@ export default {
             "https://img2.baidu.com/it/u=1336396995,334185844&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=344",
         },
       ],
+      defaultTextStyle: {
+        color: "#BFBFBF",
+        fontSize: "28rpx",
+      },
+      activeTextStyle: {
+        color: "black",
+        fontSize: "28rpx",
+        fontWeight: 500,
+      },
+      activeLineStyle: {
+        backgroundColor: "transparent",
+        height: 0,
+      },
+      goods: [],
     };
   },
   methods: {
@@ -114,16 +139,37 @@ export default {
 
 <style lang="scss">
 .container {
-  padding: 20px;
-  font-size: 14px;
-  line-height: 24px;
-}
-.swiper {
-  height: 300rpx;
-  width: 100%;
+  padding: 0 24rpx;
 
-  swiper-item image {
-    width: 100%;
+  .header {
+    height: 396rpx;
+
+    .swiper {
+      height: 100%;
+      width: 100%;
+
+      swiper-item image {
+        width: 100%;
+      }
+    }
+  }
+
+  .content {
+    height: 88rpx;
+
+    .category {
+      .tabs {
+        height: 30rpx;
+
+        .tab-pane {
+          height: 30rpx;
+        }
+
+        ::v-deep .tab-bar::after {
+          background-color: transparent;
+        }
+      }
+    }
   }
 }
 
@@ -137,20 +183,8 @@ export default {
   border: 1rpx solid #ccc;
   bottom: 200rpx;
 }
+
 .item {
   color: red;
-}
-
-.content {
-  padding: 0, 12rpx;
-  .category {
-    padding: 16rpx 0;
-    .tabs {
-      height: 30rpx;
-      .tab-pane {
-        height: 30rpx;
-      }
-    }
-  }
 }
 </style>
