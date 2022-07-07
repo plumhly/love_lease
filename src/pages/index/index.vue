@@ -17,36 +17,36 @@
         </swiper-item>
       </swiper>
     </view>
-    <view class="content">
-      <view class="category">
-        <custom-tabs
-          class="tabs"
-          type="c1"
-          :value="categoryIndex"
-          @change="changeCategory"
-          :defaultTextStyle="defaultTextStyle"
-          :activeTextStyle="activeTextStyle"
-          :activeLineStyle="activeLineStyle"
-        >
-          <custom-tab-pane
-            class="tab-pane"
-            v-for="(category, index) in categories"
-            :key="index"
-            :name="'c1_' + index"
-            :label="category.name"
+    <view class="category">
+      <v-tabs
+        :tabs="categoryConfig.tabs"
+        :color="categoryConfig.color"
+        :activeColor="categoryConfig.activeColor"
+        :value="categoryConfig.activeIndex"
+        :bold="changeCategory.bold"
+        :lineHeight="categoryConfig.lineHeight"
+        @tabClick="changeCategory"
+      />
+    </view>
+    <view class="list">
+      <view v-if="isEmpty"></view>
+      <view v-else>
+        <uni-grid :column="2" :square="false" :showBorder="false">
+          <uni-grid-item
+            v-for="(good, goodIndex) in goods"
+            :key="goodIndex"
+            :index="goodIndex"
           >
-            <view v-if="isEmpty"></view>
-            <view v-else>
-              <uni-grid :column="2">
-                <uni-grid-item>1</uni-grid-item>
-              </uni-grid>
-              <uni-load-more :status="loadMoreStatus" />
-            </view>
-            <view>1</view>
-          </custom-tab-pane>
-        </custom-tabs>
+            <pl-good-item
+              :name="good.name"
+              :url="good.url"
+              :price="good.price"
+              :index="index"
+            ></pl-good-item>
+          </uni-grid-item>
+        </uni-grid>
+        <uni-load-more :status="loadMoreStatus" />
       </view>
-      <view class="list"></view>
     </view>
   </view>
 </template>
@@ -57,7 +57,7 @@ export default {
   onLoad(options) {
     for (let index = 0; index < 10; index++) {
       this.goods.push({
-        name: "汉服1",
+        name: "漢服，泛指漢人的服飾，也是一種中國朝代服飾以及相對於中國少數民族服飾的漢人服飾的概念",
         price: 30,
         url: "http://news.yxrb.net/uploadfile/2020/0720/20200720035548972.jpg",
       });
@@ -66,7 +66,7 @@ export default {
 
   computed: {
     isEmpty() {
-      return this.listData == null || this.listData.length == 0;
+      return this.goods == null || this.goods.length == 0;
     },
   },
 
@@ -80,20 +80,7 @@ export default {
       searchValue: "",
       categoryIndex: 0,
       loadMoreStatus: "more",
-      categories: [
-        {
-          name: "汉服",
-          value: 0,
-        },
-        {
-          name: "中山装",
-          value: 1,
-        },
-        {
-          name: "现代装",
-          value: 2,
-        },
-      ],
+      activeIndex: 0,
       listData: [],
       sliders: [
         {
@@ -112,9 +99,13 @@ export default {
             "https://img2.baidu.com/it/u=1336396995,334185844&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=344",
         },
       ],
-      defaultTextStyle: {
+      categoryConfig: {
+        tabs: ["汉服", "中山装", "现代装"],
         color: "#BFBFBF",
-        fontSize: "28rpx",
+        activeColor: "black",
+        lineHeight: "0rpx",
+        bold: false,
+        activeIndex: 0,
       },
       activeTextStyle: {
         color: "black",
@@ -137,8 +128,11 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container {
+  display: flex;
+  flex-direction: column;
+
   padding: 0 24rpx;
 
   .header {
@@ -153,22 +147,13 @@ export default {
       }
     }
   }
-
-  .content {
+  .category {
     height: 88rpx;
+  }
 
-    .category {
-      .tabs {
-        height: 30rpx;
-
-        .tab-pane {
-          height: 30rpx;
-        }
-
-        ::v-deep .tab-bar::after {
-          background-color: transparent;
-        }
-      }
+  .list {
+    view uni-grid {
+      width: 200rpx;
     }
   }
 }
