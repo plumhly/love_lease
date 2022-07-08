@@ -25,13 +25,19 @@
         :value="categoryConfig.activeIndex"
         :bold="changeCategory.bold"
         :lineHeight="categoryConfig.lineHeight"
+        :height="categoryConfig.height"
         @tabClick="changeCategory"
       />
     </view>
     <view class="list">
       <view v-if="isEmpty"></view>
       <view v-else>
-        <uni-grid :column="2" :square="false" :showBorder="false">
+        <uni-grid
+          :column="2"
+          :square="false"
+          :showBorder="false"
+          @change="showDetail"
+        >
           <uni-grid-item
             v-for="(good, goodIndex) in goods"
             :key="goodIndex"
@@ -55,13 +61,13 @@
 <script>
 export default {
   onLoad(options) {
-    for (let index = 0; index < 10; index++) {
-      this.goods.push({
-        name: "漢服，泛指漢人的服飾，也是一種中國朝代服飾以及相對於中國少數民族服飾的漢人服飾的概念",
-        price: 30,
-        url: "http://news.yxrb.net/uploadfile/2020/0720/20200720035548972.jpg",
-      });
-    }
+    this.loadMore();
+  },
+
+  onReachBottom() {
+    this.loadMoreStatus = "loading";
+    this.loadMore();
+    this.loadMoreStatus = "more";
   },
 
   computed: {
@@ -106,6 +112,7 @@ export default {
         lineHeight: "0rpx",
         bold: false,
         activeIndex: 0,
+        height: "88rpx",
       },
       activeTextStyle: {
         color: "black",
@@ -122,6 +129,22 @@ export default {
   methods: {
     changeCategory(index) {
       // 获取分类数据
+    },
+
+    showDetail(index) {
+      uni.navigateTo({
+        url: "/pages/goodsDetail/index",
+      });
+    },
+
+    loadMore() {
+      for (let index = 0; index < 10; index++) {
+        this.goods.push({
+          name: "漢服，泛指漢人的服飾，也是一種中國朝代服飾以及相對於中國少數民族服飾的漢人服飾的概念",
+          price: 30,
+          url: "http://news.yxrb.net/uploadfile/2020/0720/20200720035548972.jpg",
+        });
+      }
     },
   },
   // components: { CustomTabs, CustomTabPane },
@@ -149,12 +172,13 @@ export default {
   }
   .category {
     height: 88rpx;
+    position: sticky;
+    z-index: 100;
+    top: 0;
   }
 
   .list {
-    view uni-grid {
-      width: 200rpx;
-    }
+    background-color: #cccccc1a;
   }
 }
 

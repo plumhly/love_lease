@@ -42,6 +42,7 @@ export default {
 .container {
   display: flex;
   flex-direction: column;
+  margin-top: 12rpx;
   overflow: hidden;
   image {
     height: 318rpx;
