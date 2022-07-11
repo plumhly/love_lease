@@ -1,8 +1,13 @@
 <template>
   <view class="container">
-    <view class="banner-container">
-      <swiper>
-        <swiper-item v-for="(item, index) in banners" :key="index">
+    <button @click="showBannerDetail">点击</button>
+    <!-- <view class="banner-container">
+      <swiper @change="changeSwipper">
+        <swiper-item
+          v-for="(item, index) in banners"
+          :key="index"
+          @tap="showBannerDetail"
+        >
           <image :src="item.url" mode="aspectFill" />
         </swiper-item>
       </swiper>
@@ -18,18 +23,23 @@
       <label class="introduce">{{ introduce }}</label>
     </view>
     <view class="detail-picture">
-      <!-- <image
+      <image
         v-for="(item, index) in banners"
         :key="index"
         mode="aspectFill"
         :src="item.url"
-      /> -->
-      <image
-        src="https://img2.baidu.com/it/u=1336396995,334185844&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=344"
-        mode="scaleToFill"
       />
+    </view> -->
+    <!-- <view class="float-button" @tap="comminicateWithHost">
+      <uni-icons type="weixin" size="26" color="#25DB5AFF" />
+      <label>找店家</label>
+    </view> -->
+    <view class="pop">
+      <uni-popup ref="popup" background-color="red">
+        <!-- <pl-image-detail :defaultIndex="currentBannerIndex" :list="banners" /> -->
+        哈哈哈哈
+      </uni-popup>
     </view>
-    <view class="float-button"> </view>
   </view>
 </template>
 
@@ -60,19 +70,21 @@ export default {
       return this.currentBannerIndex + "/" + this.banners.length;
     },
   },
-  methods: {},
-  watch: {},
+  methods: {
+    changeSwipper(event) {
+      this.currentBannerIndex = event.detail.current + 1;
+    },
 
-  // 页面周期函数--监听页面加载
-  onLoad() {},
-  // 页面周期函数--监听页面初次渲染完成
-  onReady() {},
-  // 页面周期函数--监听页面显示(not-nvue)
-  onShow() {},
-  // 页面周期函数--监听页面隐藏
-  onHide() {},
-  // 页面周期函数--监听页面卸载
-  onUnload() {},
+    comminicateWithHost() {
+      uni.switchTab({
+        url: "/pages/user/index",
+      });
+    },
+
+    showBannerDetail() {
+      this.$refs.popup.open("bottom");
+    },
+  },
 };
 </script>
 
@@ -83,7 +95,6 @@ export default {
   aspect-ratio: 1;
 }
 .container {
-  background: red;
   .banner-container {
     swiper {
       @include wipper-setting;
@@ -131,13 +142,34 @@ export default {
   }
 
   .detail-picture {
+    display: flex;
+    flex-direction: column;
     image {
       width: 100%;
-      // height: 240rpx;
+      height: 480rpx;
     }
   }
 
   .float-button {
+    box-sizing: border-box;
+    background-color: white;
+    width: 116rpx;
+    height: 116rpx;
+    border-radius: 58rpx;
+    box-shadow: 0 2rpx 20rpx 0 #00000033;
+    padding: 34rpx 22rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    right: 28rpx;
+    bottom: 50rpx;
+    label {
+      color: #25db5aff;
+      font-size: 24rpx;
+      font-weight: 300;
+    }
   }
 }
 </style>
