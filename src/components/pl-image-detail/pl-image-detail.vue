@@ -1,7 +1,7 @@
 <template>
-  <view class="contaienr">
-    <label class="tag"></label>
-    <swiper @change="change">
+  <view class="container" @tap="dismiss">
+    <label class="tag">{{ tagString }}</label>
+    <swiper @change="change" :current="defaultIndex">
       <swiper-item v-for="(item, index) in list" :key="index">
         <image :src="item" mode="aspectFill" />
       </swiper-item>
@@ -12,41 +12,74 @@
 <script>
 export default {
   props: {
-    defaultIndex: Number,
+    defaultIndex: {
+      type: Number,
+      default: 0,
+    },
     list: Array,
   },
 
-  data: () => ({
-    currentIndex: 0,
-  }),
+  emits: ["dismiss"],
+
+  data() {
+    return {
+      currentIndex: this.defaultIndex,
+    };
+  },
+
   computed: {
     tagString() {
-      return this.currentIndex + "/" + this.list.length;
+      return this.currentIndex + 1 + "/" + this.list.length;
     },
   },
+
+  watch: {
+    defaultIndex(newValue, oldValue) {
+      this.currentIndex = newValue;
+    },
+  },
+
   methods: {
     change(event) {
-      this.currentIndex = event.detail.current + 1;
+      let index = event.detail.current;
+      if (index < this.list.length) {
+        this.currentIndex = index;
+      }
+    },
+
+    dismiss() {
+      this.$emit("dismiss");
+    },
+
+    updateIndex(index) {
+      this.currentIndex = index;
     },
   },
-  watch: {
-    defaultIndex(newIndex, oldIndnex) {
-      this.currentIndex = newIndex;
-    },
+
+  beforeUpdate() {
+    console.log("ddd");
+  },
+
+  beforeDestroy() {
+    console.log("beforeDestroy");
   },
 };
 </script>
 
 <style scoped lang="scss">
 @mixin wipper-setting {
-  width: 100%;
+  width: 750rpx;
   height: auto;
   aspect-ratio: 1;
 }
 
 .container {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background-color: black;
+  padding-top: 40rpx;
   .tag {
-    margin-top: 40rpx;
     color: white;
     font-size: 28rpx;
     text-align: center;

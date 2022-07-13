@@ -52,6 +52,11 @@ export default {
     font-size: 24rpx;
     color: #000000d9;
     padding: 10rpx 9rpx 6rpx 9rpx;
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
   .price {
     color: #fa7801ff;
