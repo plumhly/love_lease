@@ -1,13 +1,15 @@
 <template>
   <view class="container">
-    <view class="content">
-      <view class="leading_container">
-        <slot name="leading" />
-        <text>{{ title }}</text>
-      </view>
-      <view class="tail">
-        <text>{{ value }}</text>
-        <slot name="tail" class=""></slot>
+    <view class="main" @click="select">
+      <view class="content">
+        <view class="leading_container">
+          <slot name="leading" />
+          <text>{{ title }}</text>
+        </view>
+        <view class="tail">
+          <text>{{ value }}</text>
+          <slot name="tail" />
+        </view>
       </view>
     </view>
     <view v-if="showBorder" class="border"></view>
@@ -24,19 +26,18 @@ export default {
     },
     title: String,
     value: String,
-    tailSrc: String,
     showBorder: {
       type: Boolean,
       default: true,
     },
   },
   data: () => ({}),
-  computed: {
-    showTail() {
-      return this.tailSrc != null && this.tailSrc.length > 0;
+  computed: {},
+  methods: {
+    select() {
+      this.$emit("click");
     },
   },
-  methods: {},
   watch: {},
 
   // 组件周期函数--监听组件挂载完毕
@@ -58,6 +59,11 @@ export default {
 @import "@/uni.scss";
 
 .container {
+  position: relative;
+  height: 100%;
+}
+
+.main {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -76,7 +82,7 @@ export default {
     display: flex;
     align-items: center;
     text {
-      margin-left: 20px;
+      margin-left: 16px;
       font-size: $uni-font-size-base;
       line-height: $uni-font-size-base;
       font-weight: 500;
@@ -100,8 +106,11 @@ export default {
 }
 
 .border {
-  margin-left: 52rpx;
-  height: 1rpx;
-  color: $uni-border-color;
+  position: absolute;
+  bottom: 0;
+  left: 52rpx;
+  right: 0;
+  height: 2rpx;
+  background-color: $uni-border-color;
 }
 </style>
