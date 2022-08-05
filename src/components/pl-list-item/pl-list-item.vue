@@ -1,12 +1,12 @@
 <template>
   <view class="container">
-    <view class="main" @click="select">
+    <view class="main">
       <view class="content">
         <view class="leading_container">
           <slot name="leading" />
           <text>{{ title }}</text>
         </view>
-        <view class="tail">
+        <view class="tail" @click="select">
           <text>{{ value }}</text>
           <slot name="tail" />
         </view>
@@ -30,12 +30,13 @@ export default {
       type: Boolean,
       default: true,
     },
+    index: Number,
   },
   data: () => ({}),
   computed: {},
   methods: {
     select() {
-      this.$emit("click");
+      this.$emit("click", this.index);
     },
   },
   watch: {},
@@ -91,11 +92,16 @@ export default {
   }
 
   .tail {
+    display: flex;
+    align-items: center;
     text {
       line-height: $uni-font-size-base;
-      font-size: $uni-font-size-base;
+      font-size: $uni-font-size-sm;
       color: $uni-color-title;
       font-weight: 300;
+      display: inline-block;
+      text-align: left;
+      max-width: 60vw;
     }
 
     image {
