@@ -2,7 +2,7 @@
   <view class="container">
     <view class="header">
       <swiper
-        v-if="configure.showSwipper"
+        v-if="sliders.length > 0"
         class="swiper"
         :indicator-dots="true"
         circular
@@ -13,7 +13,7 @@
         indicator-active-color="white"
       >
         <swiper-item v-for="(item, index) in sliders" :key="index">
-          <image :src="item.picture"></image>
+          <image :src="item.pictureUrl"></image>
         </swiper-item>
       </swiper>
     </view>
@@ -59,6 +59,7 @@
 
 
 <script>
+import { fetchHomeData } from "@/api";
 export default {
   onLoad(options) {
     this.loadMore();
@@ -79,34 +80,14 @@ export default {
   data() {
     return {
       href: "https://uniapp.dcloud.io/component/README?id=uniui",
-      configure: {
-        showSwipper: true,
-        showSearchBar: false,
-      },
       searchValue: "",
       categoryIndex: 0,
       loadMoreStatus: "more",
       activeIndex: 0,
       listData: [],
-      sliders: [
-        {
-          url: "",
-          picture:
-            "https://img2.baidu.com/it/u=1336396995,334185844&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=344",
-        },
-        {
-          url: "",
-          picture:
-            "https://img2.baidu.com/it/u=1336396995,334185844&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=344",
-        },
-        {
-          url: "",
-          picture:
-            "https://img2.baidu.com/it/u=1336396995,334185844&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=344",
-        },
-      ],
+      sliders: [],
       categoryConfig: {
-        tabs: ["汉服", "中山装", "现代装"],
+        tabs: [],
         color: "#BFBFBF",
         activeColor: "black",
         lineHeight: "0rpx",
@@ -114,6 +95,7 @@ export default {
         activeIndex: 0,
         height: "88rpx",
       },
+      recommendList: [],
       activeTextStyle: {
         color: "black",
         fontSize: "28rpx",
@@ -137,14 +119,34 @@ export default {
       });
     },
 
-    loadMore() {
-      for (let index = 0; index < 10; index++) {
-        this.goods.push({
-          name: "漢服，泛指漢人的服飾，也是一種中國朝代服飾以及相對於中國少數民族服飾的漢人服飾的概念",
-          price: 30,
-          url: "http://news.yxrb.net/uploadfile/2020/0720/20200720035548972.jpg",
-        });
+    loadData() {
+      fetchHomeData()
+        .then((data) => {})
+        .catchError((e) => {});
+    },
+
+    parseData(data) {
+      if (data == null) {
+        return;
       }
+
+      // banner数据
+      this.sliders = data.carousels || [];
+
+      let recommandTabs = [];
+      // 新品推荐
+      if (data.newCommodities) {
+        recommandTabs.push("新品推荐");
+        this.recommendList.push(data.newCommodities);
+      }
+
+      // 热门推荐
+      if (data.hotCommodities) {
+        recommandTabs.push("热门推荐");
+        this.recommendList.push(data.hotCommodities);
+      }
+
+      this.configure.tabs = recommandTabs;
     },
   },
   // components: { CustomTabs, CustomTabPane },

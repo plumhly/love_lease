@@ -1,4 +1,4 @@
-const baseUrl = "http://39.107.53.166/shuwei/ccp/api/v1/merchants/";
+const baseUrl = "http://39.107.53.166/";
 
 function request({
     path,
@@ -22,8 +22,17 @@ function request({
 
 
 //客服信息
+const customerServicePath = "shuwei/ccp/api/v1/merchants/1";
 export function fetchCustomerService() {
     return request({
-        path: '1',
+        path: customerServicePath,
+    });
+}
+
+// 首页
+const homePath = "wx/home/index";
+export function fetchHomeData() {
+    return request({
+        path: homePath,
     });
 }
