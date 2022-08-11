@@ -60,7 +60,7 @@ export default {
     itemDatas: [],
     companyName: "",
     logoUrl: "",
-    tip: "点击电话号码可以呼叫店家",
+    tip: "点击电话号码可以呼叫店家\n点击微信栏可以赋值微信账号\n点击二维码图标可以显示二维码",
     qrUrl: "",
   }),
   computed: {},

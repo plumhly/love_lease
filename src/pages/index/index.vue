@@ -26,12 +26,12 @@
         :bold="changeCategory.bold"
         :lineHeight="categoryConfig.lineHeight"
         :height="categoryConfig.height"
-        @tabClick="changeCategory"
+        @change="changeCategory"
       />
     </view>
     <view class="list">
       <view v-if="isEmpty"></view>
-      <view v-else>
+      <scroll-view scroll-y :scroll-top="scrollTop" @scroll="scroll" v-else>
         <uni-grid
           :column="2"
           :square="false"
@@ -45,30 +45,30 @@
           >
             <pl-good-item
               :name="good.name"
-              :url="good.url"
+              :url="good.mainPictureUrl"
               :price="good.price"
               :index="index"
             ></pl-good-item>
           </uni-grid-item>
         </uni-grid>
         <uni-load-more :status="loadMoreStatus" />
-      </view>
+      </scroll-view>
     </view>
   </view>
 </template>
 
 
 <script>
-import { fetchHomeData } from "@/api";
+import { fetchHomeData } from "@/api/";
 export default {
   onLoad(options) {
-    this.loadMore();
+    this.loadData();
   },
 
   onReachBottom() {
-    this.loadMoreStatus = "loading";
-    this.loadMore();
-    this.loadMoreStatus = "more";
+    // this.loadMoreStatus = "loading";
+    // this.loadMore();
+    // this.loadMoreStatus = "more";
   },
 
   computed: {
@@ -82,9 +82,12 @@ export default {
       href: "https://uniapp.dcloud.io/component/README?id=uniui",
       searchValue: "",
       categoryIndex: 0,
-      loadMoreStatus: "more",
+      loadMoreStatus: "no-more",
       activeIndex: 0,
-      listData: [],
+      scrollTop: 100,
+      old: {
+        scrollTop: 0,
+      },
       sliders: [],
       categoryConfig: {
         tabs: [],
@@ -111,6 +114,18 @@ export default {
   methods: {
     changeCategory(index) {
       // 获取分类数据
+      if (index < this.recommendList.length) {
+        this.goods = this.recommendList[index];
+      }
+
+      this.gotoTop();
+    },
+
+    gotoTop() {
+      this.scrollTop = this.old.scrollTop;
+      this.$nextTick(() => {
+        this.scrollTop = 0;
+      });
     },
 
     showDetail(index) {
@@ -121,8 +136,10 @@ export default {
 
     loadData() {
       fetchHomeData()
-        .then((data) => {})
-        .catchError((e) => {});
+        .then((data) => {
+          this.parseData(data);
+        })
+        .catch((e) => {});
     },
 
     parseData(data) {
@@ -146,7 +163,14 @@ export default {
         this.recommendList.push(data.hotCommodities);
       }
 
-      this.configure.tabs = recommandTabs;
+      this.categoryConfig.tabs = recommandTabs;
+      if (this.recommendList.length > 0) {
+        this.goods = this.recommendList[0];
+      }
+    },
+
+    scroll(event) {
+      this.old.scrollTop = event.detail.scrollTop;
     },
   },
   // components: { CustomTabs, CustomTabPane },

@@ -85,7 +85,7 @@ export default {
 
     comminicateWithHost() {
       uni.switchTab({
-        url: "/pages/user/index",
+        url: "/pages/customer-service/index",
       });
     },
 

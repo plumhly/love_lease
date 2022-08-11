@@ -20,7 +20,7 @@ export default {
   props: {
     url: String,
     name: String,
-    price: Number,
+    price: String,
     index: Number,
   },
   data() {
@@ -40,6 +40,7 @@ export default {
   margin-left: 6rpx;
 }
 .container {
+  background-color: white;
   display: flex;
   flex-direction: column;
   margin-top: 12rpx;
