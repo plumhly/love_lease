@@ -1,5 +1,9 @@
 <template>
   <view class="container">
+    <view class="search">
+      <image src="/static/search.png" mode="scaleToFill" />
+      <text>搜索</text>
+    </view>
     <view class="header">
       <swiper
         v-if="sliders.length > 0"
@@ -19,6 +23,7 @@
     </view>
     <view class="category">
       <v-tabs
+        class="tabs"
         :tabs="categoryConfig.tabs"
         :color="categoryConfig.color"
         :activeColor="categoryConfig.activeColor"
@@ -28,6 +33,7 @@
         :height="categoryConfig.height"
         @change="changeCategory"
       />
+      <image src="/static/type.png" mode="scaleToFill" />
     </view>
     <view class="list">
       <view v-if="isEmpty"></view>
@@ -178,11 +184,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/uni.scss";
+
 .container {
   display: flex;
   flex-direction: column;
 
   padding: 0 24rpx;
+
+  .search {
+    height: 84rpx;
+    border-radius: 42rpx;
+    border: 2px solid $uni-seach-border-color;
+    margin: 16rpx 0;
+    padding-left: 40rpx;
+    display: flex;
+    align-items: center;
+
+    image {
+      height: 48rpx;
+      width: 48rpx;
+    }
+
+    text {
+      font-size: 28rpx;
+      color: $uni-seach-border-color;
+      margin-left: 22rpx;
+    }
+  }
 
   .header {
     height: 396rpx;
@@ -201,6 +230,19 @@ export default {
     position: sticky;
     z-index: 100;
     top: 0;
+    display: flex;
+    align-items: center;
+
+    .tabs {
+      display: inline-block;
+      flex: 2 1 auto;
+    }
+
+    image {
+      width: 38rpx;
+      height: 32rpx;
+      margin-left: 20rpx;
+    }
   }
 
   .list {

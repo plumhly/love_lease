@@ -1,5 +1,12 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [
+		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/goods-list/index",
+			"style": {
+				"navigationBarTitleText": "商品列表"
+			}
+		},
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -52,7 +59,9 @@
 		"custom": {
 			"uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
 			"v-(.*)": "@/components/v-$1/v-$1.vue",
-			"pl-(.*)": "@/components/pl-$1/pl-$1.vue"
+			"pl-(.*)": "@/components/pl-$1/pl-$1.vue",
+			"HM-(.*)": "@/components/HM-$1/HM-$1.vue",
+			"sl-(.*)": "@/components/sl-$1/sl-$1.vue"
 		}
 	}
 }

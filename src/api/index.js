@@ -42,3 +42,16 @@ export function fetchHomeData() {
         path: homePath,
     });
 }
+
+// 分类
+const typePath = "shuwei/ccp/api/v1/commodityCategories/search/layered";
+export function fetchTypeData({
+    merchantId = 1
+}) {
+    return request({
+        path: typePath,
+        para: {
+            merchantId: merchantId
+        }
+    });
+}
