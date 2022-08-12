@@ -1,7 +1,7 @@
 <template>
   <view>
     <view class="select-container">
-      <sl-filter class="select" :menuList="menuList"></sl-filter>
+      <sl-filter ref="filter" class="select" :list="menuList"></sl-filter>
     </view>
     <view class="good_list"> </view>
   </view>
@@ -9,7 +9,9 @@
 
 <script>
 import { fetchTypeData } from "@/api/index.js";
+import slFilter from "../../components/sl-filter/sl-filter.vue";
 export default {
+  components: { slFilter },
   name: "goods-list",
   props: {},
   data() {
@@ -87,35 +89,80 @@ export default {
   computed: {},
   methods: {
     parseData(data) {
-      if (data) {
-        this.typeList = data;
-        let second = data[0].children;
-        //   data.map((item) => {
-        //   return {
-        //     name: item.name,
-        //     value: item.name,
-        //     children: item.children.map((child) => {
-        //       return {
-        //         name: child.name,
-        //         value: child.name,
-        //       };
-        //     }),
-        //   };
-        // });
-        this.filterData = [
-          {
-            name: "1",
-            type: "filter",
-            submenu: [{ name: "1_1" }, { name: "1_2" }, { name: "1_3" }],
-          },
-        ];
+      if (data && data instanceof Array) {
+        let firstData = {
+          title: data[0].name,
+          defaultSelectedIndex: 0,
+          isSort: true,
+          key: "1",
+          detailList: data.map((item) => {
+            return {
+              title: item.name,
+            };
+          }),
+        };
+        let secondData = {
+          title: data[0].children[0].name,
+          defaultSelectedIndex: 0,
+          isSort: true,
+          key: "2",
+          detailList: data[0].children.map((item) => {
+            return {
+              name: item.name,
+            };
+          }),
+        };
+        // this.menuList[0] = firstData;
+        // this.menuList[1] = secondData;
+        // this.menuList[0] = {
+        //   title: "1",
+        //   defaultSelectedIndex: 0,
+        //   isSort: true,
+        //   key: "1",
+        //   detailList: [
+        //     {
+        //       title: "1",
+        //       value: "1",
+        //     },
+        //     {
+        //       title: "2",
+        //       value: "1",
+        //     },
+        //     {
+        //       title: "3",
+        //       value: "1",
+        //     },
+        //   ],
+        // };
+        // this.$refs.filter.resetMenuList(this.menuList);
 
-        this.$nextTick(() => {
-          this.defaultSelected = [2];
-        });
-
-        let child = data[0].children;
-        // this.filterData = ;
+        let menuListItem = {
+          title: "职位",
+          detailTitle: "请选择职位类型（单选）(默认值为1)",
+          isMutiple: false,
+          key: "jobType",
+          defaultSelectedIndex: 1,
+          detailList: [
+            {
+              title: "不限",
+              value: "",
+            },
+            {
+              title: "new_1",
+              value: "new_1",
+            },
+            {
+              title: "new_2",
+              value: "new_2",
+            },
+            {
+              title: "new_3",
+              value: "new_3",
+            },
+          ],
+        };
+        this.menuList[0] = menuListItem;
+        this.$refs.filter.resetMenuList(this.menuList);
       }
     },
     loadTypeData() {
