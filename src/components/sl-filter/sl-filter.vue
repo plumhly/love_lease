@@ -29,7 +29,6 @@
       :tabHeight="tabHeight"
     >
       <sl-filter-view
-        :ref="'slFilterView'"
         :independence="independence"
         :themeColor="themeColor"
         :list.sync="menuListTemp"
@@ -43,6 +42,7 @@
 <script>
 import popupLayer from "@/components/sl-filter/popup-layer.vue";
 import slFilterView from "@/components/sl-filter/filter-view.vue";
+import Vue from "vue";
 export default {
   components: {
     popupLayer,
@@ -100,40 +100,7 @@ export default {
   },
   // #ifndef H5
   onReady: function () {
-    let arr = [];
-    let titleArr = [];
-    let r = {};
-    for (let i = 0; i < this.menuList.length; i++) {
-      arr.push({
-        isActive: false,
-      });
-      // titleArr.push({
-      // 	'title': this.menuList[i].title,
-      // 	'key': this.menuList[i].key
-      // })
-
-      r[this.menuList[i].key] = this.menuList[i].title;
-
-      if (
-        this.menuList[i].reflexTitle &&
-        this.menuList[i].defaultSelectedIndex > -1
-      ) {
-        titleArr.push({
-          title:
-            this.menuList[i].detailList[this.menuList[i].defaultSelectedIndex]
-              .title,
-          key: this.menuList[i].key,
-        });
-      } else {
-        titleArr.push({
-          title: this.menuList[i].title,
-          key: this.menuList[i].key,
-        });
-      }
-    }
-    this.statusList = arr;
-    this.titleList = titleArr;
-    this.tempTitleObj = r;
+    this.resetData();
   },
   // #endif
 
@@ -193,6 +160,10 @@ export default {
         let item = arr[i];
         for (let j = 0; j < item.detailList.length; j++) {
           let d_item = item.detailList[j];
+          // if (d_item.hasOwnProperty("isSelected")) {
+          //   break;
+          // }
+
           if (j == 0) {
             d_item.isSelected = true;
           } else {
@@ -214,10 +185,10 @@ export default {
         callback(e);
       });
     },
-    resetMenuList(val) {
+    resetMenuList(val, index) {
       this.menuList = val;
-      this.$emit("update:menuList", val);
-      this.$forceUpdate();
+      this.$emit("update:list", val);
+      this.updateData(index);
       this.$refs.slFilterView.resetMenuList(val);
     },
     showMenuClick(index) {
@@ -262,6 +233,11 @@ export default {
           }
           if (this.menuList[this.selectedIndex].reflexTitle) {
             this.titleList[this.selectedIndex].title = tempTitle;
+            Vue.set(
+              this.titleList,
+              this.selectedIndex,
+              this.titleList[this.selectedIndex]
+            );
           }
         }
       } else {
@@ -289,6 +265,52 @@ export default {
       for (let i = 0; i < this.statusList.length; i++) {
         this.statusList[i].isActive = false;
       }
+    },
+
+    updateData(index) {
+      if (index) {
+        this.titleList[index].title = this.menuList[index].title;
+        Vue.set(this.titleList, index, this.titleList[index]);
+      } else {
+        this.resetData();
+      }
+    },
+
+    resetData() {
+      let arr = [];
+      let titleArr = [];
+      let r = {};
+      for (let i = 0; i < this.menuList.length; i++) {
+        arr.push({
+          isActive: false,
+        });
+        // titleArr.push({
+        // 	'title': this.menuList[i].title,
+        // 	'key': this.menuList[i].key
+        // })
+
+        r[this.menuList[i].key] = this.menuList[i].title;
+
+        if (
+          this.menuList[i].reflexTitle &&
+          this.menuList[i].defaultSelectedIndex > -1
+        ) {
+          titleArr.push({
+            title:
+              this.menuList[i].detailList[this.menuList[i].defaultSelectedIndex]
+                .title,
+            key: this.menuList[i].key,
+          });
+        } else {
+          titleArr.push({
+            title: this.menuList[i].title,
+            key: this.menuList[i].key,
+          });
+        }
+      }
+      this.statusList = arr;
+      this.titleList = titleArr;
+      this.tempTitleObj = r;
     },
   },
 };

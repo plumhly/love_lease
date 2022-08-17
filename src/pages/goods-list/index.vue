@@ -1,7 +1,13 @@
 <template>
   <view>
     <view class="select-container">
-      <sl-filter ref="filter" class="select" :list="menuList"></sl-filter>
+      <sl-filter
+        ref="filter"
+        class="select"
+        :list.sync="menuList"
+        @result="changeType"
+        independence
+      />
     </view>
     <view class="good_list"> </view>
   </view>
@@ -10,79 +16,21 @@
 <script>
 import { fetchTypeData } from "@/api/index.js";
 import slFilter from "../../components/sl-filter/sl-filter.vue";
+const firstLevelKey = "firstLevelKey";
+const secondLevelKey = "secondLevelKey";
 export default {
   components: { slFilter },
   name: "goods-list",
   props: {},
   data() {
     return {
-      menuList: [
-        {
-          title: "菜单1",
-          detailTitle: "子标题1",
-          isMutiple: true,
-          key: "key_1",
-          detailList: [
-            {
-              title: "不限",
-              value: "",
-            },
-            {
-              title: "条件_1_1",
-              value: "val_1_1",
-            },
-            {
-              title: "条件1_2",
-              value: "val_1_2",
-            },
-          ],
-        },
-        {
-          title: "菜单2",
-          detailTitle: "子标题2",
-          key: "key_2",
-          isMutiple: false,
-          detailList: [
-            {
-              title: "不限",
-              value: "",
-            },
-            {
-              title: "条件_2_1",
-              value: "val_2_1",
-            },
-            {
-              title: "条件_2_2",
-              value: "val_2_2",
-            },
-          ],
-        },
-        {
-          title: "菜单3",
-          detailTitle: "子标题3",
-          key: "key_3",
-          isSort: true,
-          isMutiple: false,
-          detailList: [
-            {
-              title: "条件_3_1",
-              value: "val_3_1",
-            },
-            {
-              title: "条件_3_2",
-              value: "val_3_2",
-            },
-            {
-              title: "条件_3_3",
-              value: "val_3_3",
-            },
-          ],
-        },
-      ],
+      menuList: [],
       defaultSelected: [],
       defaultFilterData: [],
       goodsList: [],
       typeList: [],
+      parentIndex: 0,
+      childIndex: 0,
       // secondClassList: [],
     };
   },
@@ -90,81 +38,72 @@ export default {
   methods: {
     parseData(data) {
       if (data && data instanceof Array) {
-        let firstData = {
-          title: data[0].name,
-          defaultSelectedIndex: 0,
-          isSort: true,
-          key: "1",
-          detailList: data.map((item) => {
-            return {
-              title: item.name,
-            };
-          }),
-        };
-        let secondData = {
-          title: data[0].children[0].name,
-          defaultSelectedIndex: 0,
-          isSort: true,
-          key: "2",
-          detailList: data[0].children.map((item) => {
-            return {
-              name: item.name,
-            };
-          }),
-        };
-        // this.menuList[0] = firstData;
-        // this.menuList[1] = secondData;
-        // this.menuList[0] = {
-        //   title: "1",
-        //   defaultSelectedIndex: 0,
-        //   isSort: true,
-        //   key: "1",
-        //   detailList: [
-        //     {
-        //       title: "1",
-        //       value: "1",
-        //     },
-        //     {
-        //       title: "2",
-        //       value: "1",
-        //     },
-        //     {
-        //       title: "3",
-        //       value: "1",
-        //     },
-        //   ],
-        // };
-        // this.$refs.filter.resetMenuList(this.menuList);
-
-        let menuListItem = {
-          title: "职位",
-          detailTitle: "请选择职位类型（单选）(默认值为1)",
-          isMutiple: false,
-          key: "jobType",
-          defaultSelectedIndex: 1,
-          detailList: [
-            {
-              title: "不限",
-              value: "",
-            },
-            {
-              title: "new_1",
-              value: "new_1",
-            },
-            {
-              title: "new_2",
-              value: "new_2",
-            },
-            {
-              title: "new_3",
-              value: "new_3",
-            },
-          ],
-        };
-        this.menuList[0] = menuListItem;
+        this.typeList = data;
+        let firstData = this.createTypeData(data, firstLevelKey);
+        let secondData = this.createTypeData(data[0].children, secondLevelKey);
+        this.menuList[0] = firstData;
+        this.menuList[1] = secondData;
         this.$refs.filter.resetMenuList(this.menuList);
       }
     },
+
+    createTypeData(data, key) {
+      return {
+        title: data[0].name,
+        defaultSelectedIndex: 0,
+        isSort: true,
+        reflexTitle: true,
+        key: key || data[0].name,
+        detailList: data.map((item, index) => {
+          return {
+            title: item.name,
+            value: index,
+          };
+        }),
+      };
+    },
+
+    changeType(result) {
+      if (result[firstLevelKey]) {
+        // 第一层级
+        let data = result[firstLevelKey];
+        if (data !== this.parentIndex) {
+          this.parentIndex = data;
+          // 调整子选择
+          this.menuList[1] = this.createTypeData(
+            this.typeList[this.parentIndex].children
+          );
+          this.$refs.filter.resetMenuList(this.menuList, 1);
+
+          // 更新数据
+        }
+      } else {
+        // 第二层级
+        let data = result[secondLevelKey];
+        if (data !== this.childIndex) {
+          this.childIndex = data;
+          // 更新数据
+        }
+      }
+    },
+
+    changeChildSelect(data) {
+      let second = {
+        title: data[0].name,
+        defaultSelectedIndex: 0,
+        isSort: true,
+        key: firstLevelKey,
+        detailList: data.map((item, index) => {
+          return {
+            title: item.name,
+            value: index,
+          };
+        }),
+      };
+
+      this.menuList[1] = second;
+    },
+
     loadTypeData() {
       fetchTypeData({}).then((data) => {
         this.parseData(data.data);

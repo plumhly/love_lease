@@ -275,7 +275,7 @@ export default {
     },
     resetMenuList(val) {
       this.menuList = val;
-      this.$emit("update:menuList", val);
+      this.$emit("update:list", val);
     },
     menuTabClick(index) {
       this.menuIndex = index;
