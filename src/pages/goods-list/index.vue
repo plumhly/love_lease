@@ -9,12 +9,36 @@
         independence
       />
     </view>
-    <view class="good_list"> </view>
+    <view class="good_list">
+      <view v-if="goods.length === 0"> </view>
+      <view v-else>
+        <uni-grid
+          :column="2"
+          :square="false"
+          :showBorder="false"
+          @change="showDetail"
+        >
+          <uni-grid-item
+            v-for="(good, goodIndex) in goods"
+            :key="goodIndex"
+            :index="goodIndex"
+          >
+            <pl-good-item
+              :name="good.name"
+              :url="good.mainPictureUrl"
+              :price="good.price"
+              :index="index"
+            ></pl-good-item>
+          </uni-grid-item>
+        </uni-grid>
+      </view>
+    </view>
   </view>
 </template>
 
 <script>
-import { fetchTypeData } from "@/api/index.js";
+import { fetchTypeData, fetchGoodsByCategoryID } from "@/api/index.js";
+import { M } from "caniuse-lite/data/agents";
 import slFilter from "../../components/sl-filter/sl-filter.vue";
 const firstLevelKey = "firstLevelKey";
 const secondLevelKey = "secondLevelKey";
@@ -27,10 +51,12 @@ export default {
       menuList: [],
       defaultSelected: [],
       defaultFilterData: [],
-      goodsList: [],
+      goods: [],
       typeList: [],
       parentIndex: 0,
       childIndex: 0,
+      pageIndex: 0,
+      categoryID: 0,
       // secondClassList: [],
     };
   },
@@ -109,6 +135,12 @@ export default {
         this.parseData(data.data);
       });
     },
+
+    fetchGoodsByCategoryID() {
+      fetchGoodsByCategoryID({});
+    },
+
+    loadMore() {},
   },
   watch: {},
   // 页面周期函数--监听页面加载

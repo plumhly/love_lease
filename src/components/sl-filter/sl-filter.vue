@@ -269,6 +269,8 @@ export default {
 
     updateData(index) {
       if (index) {
+        let selectedIndex = this.menuList[index].defaultSelectedIndex;
+        this.menuList[index].detailList[selectedIndex].isSelected = true;
         this.titleList[index].title = this.menuList[index].title;
         Vue.set(this.titleList, index, this.titleList[index]);
       } else {

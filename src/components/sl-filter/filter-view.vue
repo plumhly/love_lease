@@ -342,6 +342,7 @@ export default {
       }
     },
     itemTap(index, list, isMutiple, key) {
+      return;
       if (isMutiple == true) {
         list[index].isSelected = !list[index].isSelected;
         if (index == 0) {

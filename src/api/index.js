@@ -55,3 +55,22 @@ export function fetchTypeData({
         }
     });
 }
+
+// 分类查询
+const categoryForGoodsPath = "shuwei/ccp/api/v1/commodities/search/findByCategoryId";
+export function fetchGoodsByCategoryID({
+    categoryID,
+    merchantId = 1,
+    pageIndex = 0,
+    pageSize = 10,
+}) {
+    return request({
+        path: categoryForGoodsPath,
+        para: {
+            merchantId: merchantId,
+            commodityCategoryId: categoryID,
+            page: pageIndex,
+            size: pageSize,
+        }
+    });
+}
